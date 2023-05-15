@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    
+    stages {
+        // stage('git clone') {
+        //     steps {
+        //       git 'https://github.com/ahmadhassanSystemsltd/docker-nodejs-examples.git'
+        //     }
+        // }
+        stage('build') {
+            steps {
+               sh 'docker build -t node:testing simple/'
+               sh 'docker images'
+            }
+        }
+        stage('pushing to dockerhub') {
+            steps {
+               sh 'docker tag node:testing ahmedsystems/node:testing'
+               withCredentials([usernamePassword(credentialsId: 'ahmedsystems-dockerhub', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh 'docker login -u ${username} -p ${password}'
+            }
+              
+               sh 'docker push ahmedsystems/node:testing'
+            }
+        }
+    }
+}

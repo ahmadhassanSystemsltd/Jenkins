@@ -1,0 +1,19 @@
+pipeline{
+    agent any
+    tools{
+        nodejs 'nodejs'
+    }
+    stages{
+        stage('Checkout'){
+            steps{
+                git 'https://github.com/mfarhanSystemsltd/pipelines-javascript.git'
+            }
+        }
+        stage('NPM install'){
+            steps{
+                sh 'npm install'
+                copyArtifacts filter: 'target/*.war', optional: true, projectName: '/Farhan/Java', selector: lastSuccessful()
+            }
+        }
+    }
+}

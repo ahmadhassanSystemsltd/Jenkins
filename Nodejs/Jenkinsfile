@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    tools {nodejs "nodejs"}
+    
+    stages {
+        stage('git clonning') {
+            steps {
+                git 'https://github.com/MicrosoftDocs/pipelines-javascript.git'
+            }
+        }
+        stage('BuildingNodejs') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('TestingNodejs') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        
+    }
+}
+
